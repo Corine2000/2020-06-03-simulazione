@@ -3,6 +3,7 @@ package it.polito.tdp.PremierLeague.model;
 public class Player {
 	Integer playerID;
 	String name;
+	private double grado ;
 	
 	public Player(Integer playerID, String name) {
 		super();
@@ -21,6 +22,16 @@ public class Player {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	
+
+	public double getGrado() {
+		return grado;
+	}
+
+	public void setGrado(double grado) {
+		this.grado = grado;
 	}
 
 	@Override

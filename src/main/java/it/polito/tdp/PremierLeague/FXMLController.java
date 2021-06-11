@@ -5,9 +5,12 @@
 package it.polito.tdp.PremierLeague;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.PremierLeague.model.Adiacenza;
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,17 +47,71 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	txtResult.clear();
+    	
+    	if(txtGoals.getText().isEmpty()) {
+    		txtResult.setText("per creare il grafo , devi scegliere un Goals");
+    		return;
+    	}
+    	
+    	double goals =-1.0;
+    	try {
+    		goals = Double.parseDouble(txtGoals.getText());
+    		
+    	}catch(NumberFormatException n) {
+    		txtResult.setText("il goals deve essere un numero");
+    		return;
+    	}
+    	
+    	if(goals<0 || goals>4) {
+    		txtResult.setText("il goals deve essere compreso tra 0 e 4");
+    		return;
+    	}
+    	
+    	model.creaGrafo(goals);
+    	txtResult.appendText("GRAFO CREATO: \n #VERTICI: "+model.getNumVertici()+ "\n#Archi: "+model.getNumArchi());
     }
 
     @FXML
     void doDreamTeam(ActionEvent event) {
-
+    	
+    	
+    	if(txtK.getText().isEmpty()) {
+    		txtResult.setText("inserisci un numero di giocatori");
+    		return;
+    	}
+    	
+    	int k=0;
+    	try {
+    		k = Integer.parseInt(txtK.getText());
+    	}catch(NumberFormatException n) {
+    		txtResult.setText("il numero di giocatori deve essere un intero");
+    		return;
+    	}
+    	
+    	model.doRicorsione(k);
+    	
+    	
     }
 
     @FXML
     void doTopPlayer(ActionEvent event) {
-
+       txtResult.clear();
+    	
+    	if(!model.esisteGrafo()) {
+    		txtResult.setText("DEVI PRIMA CREARE IL GRAFO");
+    		return;
+    	}
+    	
+    	List<Adiacenza> battuti = model.getMiglioreGiocatore();
+    	Player best = battuti.get(0).getP1();
+    	
+    	txtResult.appendText("TOP PLAYER: "+best.toString()+"\n");
+    	txtResult.appendText("AVVERSARI BATTUTI: \n");
+    	
+    	  for(Adiacenza a: battuti) {
+    		  txtResult.appendText(a.getP2()+" |"+a.getDiffTempo()+"\n");
+    	  }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
